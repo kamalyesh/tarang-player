@@ -1,0 +1,10 @@
+{
+  // file system events
+  "SCAN_DIR": "scan directory",
+  "SCAN_DIR_RESULT": "scan directory result",
+
+  // alert events
+  "ALERT": "show alert dialog",
+  "ERROR": "show error dialog",
+  "SUCCESS": "show success dialog"
+}

@@ -1,0 +1,114 @@
+{
+  "name": "tarang-player",
+  "version": "1.0.0",
+  "description": "music player with tarang audio visualization",
+  "main": ".webpack/main",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart-": "sudo sysctl kernel.unprivileged_userns_clone=1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test --env=jsdom",
+    "react-eject": "react-scripts eject",
+    "predev": "sudo sysctl kernel.unprivileged_userns_clone=1",
+    "dev-deb": "npm run predev && concurrently -k \"BROWSER=none npm run react-start\" \"npm:electron\"",
+    "dev": "BROWSER=none npm run react-start",
+    "electron": "wait-on tcp:3000 && npm run start"
+  },
+  "git": {},
+  "keywords": [],
+  "author": "Kamalyesh Kannadkar",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-react": "^7.16.5",
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "@electron-forge/maker-deb": "^6.0.0-beta.61",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.61",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+    "@electron-forge/maker-zip": "^6.0.0-beta.61",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.63",
+    "babel-loader": "^8.2.3",
+    "concurrently": "^6.5.1",
+    "electron": "^16.0.4",
+    "electron-is-dev": "^2.0.0",
+    "json-loader": "^0.5.7",
+    "jsonc-loader": "^0.1.1",
+    "react-scripts": "^5.0.0",
+    "sass": "^1.45.0",
+    "sass-loader": "^12.4.0",
+    "style-loader": "^3.3.1",
+    "wait-on": "^6.0.0"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.7.1",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "music-metadata": "^7.11.4",
+    "node-loader": "^2.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "tarang": "^1.0.8"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "tarang_player"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        }
+      ],
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "./webpack.main.config.js",
+            "renderer": {
+              "config": "./webpack.renderer.config.js",
+              "entryPoints": [
+                {
+                  "html": "./public/index.html",
+                  "js": "./src/index.js",
+                  "name": "main_window",
+                  "preload": {
+                    "js": "./electron-src/preload.js"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

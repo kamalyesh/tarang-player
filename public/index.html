@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <script>
+        console.log(window.MyConfig)
+        window.ipcEvents = {}
+        var eventFetchInerval = setInterval(() => {
+            if (window.api && window.api.send) {
+                clearInterval(eventFetchInerval)
+                window.api.send("LOAD_EVENTS")
+                new Promise((resolve, reject) => {
+                    const eventHandler = (result) => {
+                        window.api.remove("LOAD_EVENTS_RESULT", eventHandler)
+                        console.log("load events", result)
+                        if (result) {
+                            window.ipcEvents = result
+                        } /* else {
+                            window.api.send(ipcEvents.ALERT, { title: "Alert", message: "E" })
+                            resolve()
+                        } */
+                    }
+                    window.api.receive("LOAD_EVENTS_RESULT", eventHandler)
+                })
+            }
+        }, 100);
+    </script>
+    <title>Tarang</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+
+</html>
